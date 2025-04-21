@@ -1,0 +1,1 @@
+# zora-airdrop-checker
