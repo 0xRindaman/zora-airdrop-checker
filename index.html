@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zora Airdrop Checker - HCA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/png" href="./logo.png">
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center px-4">
+  <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md text-center">
+    <img src="./logo.png" alt="Happy Cuan Airdrop Logo" class="w-24 mx-auto mb-4">
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Zora Airdrop Checker</h1>
+    <input
+      id="walletInput"
+      type="text"
+      placeholder="Enter your wallet address"
+      class="w-full p-2 border border-gray-300 rounded mb-4"
+    />
+    <button
+      onclick="checkAirdrop()"
+      class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+    >
+      Check Allocation
+    </button>
+    <div id="result" class="mt-4 text-gray-700"></div>
+  </div>
+
+  <script>
+    async function checkAirdrop() {
+      const wallet = document.getElementById("walletInput").value.trim();
+      const resultDiv = document.getElementById("result");
+
+      if (!/^0x[a-fA-F0-9]{40}$/.test(wallet)) {
+        resultDiv.textContent = "Please enter a valid EVM address.";
+        return;
+      }
+
+      resultDiv.textContent = "Checking...";
+
+      try {
+        const response = await fetch(`https://your-vercel-app.vercel.app/api/zora?address=${wallet}`);
+        const json = await response.json();
+        const tokens = json.data?.zoraTokenAllocation?.totalTokensEarned?.totalTokens;
+
+        if (tokens !== undefined) {
+          resultDiv.innerHTML = `<strong>${tokens.toFixed(4)}</strong> ZORA tokens allocated.`;
+        } else {
+          resultDiv.textContent = "No allocation found for this address.";
+        }
+      } catch (error) {
+        resultDiv.textContent = "Error fetching data. Please try again.";
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html>
