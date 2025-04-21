@@ -39,7 +39,7 @@
       resultDiv.textContent = "Checking...";
 
       try {
-        const response = await fetch(`https://your-vercel-app.vercel.app/api/zora?address=${wallet}`);
+        const response = await fetch(`https://zora-airdrop-checker.vercel.app/api/zora?address=${wallet}`);
         const json = await response.json();
         const tokens = json.data?.zoraTokenAllocation?.totalTokensEarned?.totalTokens;
 
