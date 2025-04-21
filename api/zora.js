@@ -17,7 +17,13 @@ export default async function handler(req, res) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query }),
       });
+  
       const data = await response.json();
+  
+      if (data.detail === "Ratelimit exceeded please try again later.") {
+        return res.status(429).json({ error: "Zora API rate limit exceeded. Please wait a few seconds and try again." });
+      }
+  
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.status(200).json(data);
     } catch {
